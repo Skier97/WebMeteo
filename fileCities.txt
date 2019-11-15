@@ -1,0 +1,1 @@
+[{"Id":1,"NameCity":"Garem","Temperature":20.7,"Country":"Russia"},{"Id":2,"NameCity":"Korolev","Temperature":21.3,"Country":"Russia"},{"Id":3,"NameCity":"Ramenskoe","Temperature":13.5,"Country":"Russia"},{"Id":4,"NameCity":"Moscow","Temperature":22.4,"Country":"Russia"},{"Id":5,"NameCity":"Berlin","Temperature":18.3,"Country":"Germany"}]
