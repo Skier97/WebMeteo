@@ -15,6 +15,7 @@ namespace WebMeteo.Controllers
     
     public class CityController : ApiController
     {
+        //Нужно получать данные из файла, Так коллекцию можно инициализировать только для тестового класса, а тут у тебя есть хранилище данных(фаил\БД и тп), зачем тебе тут этот мусор. Хард код никто не любит)
         List<City> cities = new List<City>() { new City(1, "Garem", 20.7, "Russia"), //нужно ли перенести в файл коллекцию? или инициализация
                                                new City(2, "Korolev", 21.3, "Russia"),//происходит здесь?
                                                new City(3, "Ramenskoe", 13.5, "Russia"),
@@ -33,6 +34,7 @@ namespace WebMeteo.Controllers
         // GET api/values/5
         public IHttpActionResult Get(string name)
         {
+            //Если ввести моСкВА?
             City tmpCity = null;
             for (int i = 0; i < cities.Count; i++)
             {
@@ -63,6 +65,7 @@ namespace WebMeteo.Controllers
         {
         }
 
+        //в контролере не должно быть логики, только эндПоинты. А лучше сделать интерфейс DbContext, от него унаследовать FileDB  
         private void UpdateDbTasks()
         {
             string jsonTasks = JsonConvert.SerializeObject(cities);
