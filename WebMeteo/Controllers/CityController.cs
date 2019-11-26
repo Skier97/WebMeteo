@@ -15,20 +15,21 @@ namespace WebMeteo.Controllers
     
     public class CityController : ApiController
     {
-        List<City> cities;        
+        List<City> cities;
+        FileDb db = new FileDb();
 
         // GET api/values
         public IHttpActionResult Get()
         {
-            cities = ReadCitiesFromFile();
-            UpdateDbTasks();
+            cities = db.ReadCitiesFromFile();
+            db.UpdateDbTasks(cities);
             return Json (cities);
         }
 
         // GET api/values/5
         public IHttpActionResult Get(string name)
         {
-            cities = ReadCitiesFromFile();
+            cities = db.ReadCitiesFromFile();
             City tmpCity = null;
             for (int i = 0; i < cities.Count; i++)
             {
@@ -45,9 +46,9 @@ namespace WebMeteo.Controllers
         [HttpPost]
         public void AddCity(City city)
         {
-            cities = ReadCitiesFromFile();
+            cities = db.ReadCitiesFromFile();
             cities.Add(city);
-            UpdateDbTasks();
+            db.UpdateDbTasks(cities);
         }
 
         // PUT api/values/5
@@ -59,27 +60,6 @@ namespace WebMeteo.Controllers
         public void Delete(int id)
         {
         }
-
-        //в контролере не должно быть логики, только эндПоинты. А лучше сделать интерфейс DbContext, от него унаследовать FileDB  
-        private void UpdateDbTasks()
-        {
-            string jsonTasks = JsonConvert.SerializeObject(cities);
-            using (StreamWriter sw = new StreamWriter(WebConfigurationManager.AppSettings["WayToDB"], false))
-            {
-                sw.WriteLine(jsonTasks);
-            }
-        }
-
-        public List<City> ReadCitiesFromFile()
-        {
-            var colCities = new List<City>();
-            using (var sr = new StreamReader(WebConfigurationManager.AppSettings["WayToDB"]))
-            {
-                string line = sr.ReadLine();
-
-                colCities = JsonConvert.DeserializeObject<List<City>>(line);
-            }
-            return colCities;
-        }
+        
     }
 }
