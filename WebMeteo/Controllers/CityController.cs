@@ -15,18 +15,12 @@ namespace WebMeteo.Controllers
     
     public class CityController : ApiController
     {
-        //Нужно получать данные из файла, Так коллекцию можно инициализировать только для тестового класса, а тут у тебя есть хранилище данных(фаил\БД и тп), зачем тебе тут этот мусор. Хард код никто не любит)
-        List<City> cities = new List<City>() { new City(1, "Garem", 20.7, "Russia"), //нужно ли перенести в файл коллекцию? или инициализация
-                                               new City(2, "Korolev", 21.3, "Russia"),//происходит здесь?
-                                               new City(3, "Ramenskoe", 13.5, "Russia"),
-                                               new City(4, "Moscow", 22.4, "Russia"),
-                                               new City(5, "Berlin", 18.3, "Germany")};
-        
+        List<City> cities;        
 
         // GET api/values
         public IHttpActionResult Get()
         {
-            //cities = ReadCitiesFromFile();
+            cities = ReadCitiesFromFile();
             UpdateDbTasks();
             return Json (cities);
         }
@@ -34,11 +28,11 @@ namespace WebMeteo.Controllers
         // GET api/values/5
         public IHttpActionResult Get(string name)
         {
-            //Если ввести моСкВА?
+            cities = ReadCitiesFromFile();
             City tmpCity = null;
             for (int i = 0; i < cities.Count; i++)
             {
-                if (cities[i].NameCity == name)
+                if (cities[i].NameCity.ToLower() == name.ToLower())
                 {
                     tmpCity = cities[i];
                     
@@ -51,6 +45,7 @@ namespace WebMeteo.Controllers
         [HttpPost]
         public void AddCity(City city)
         {
+            cities = ReadCitiesFromFile();
             cities.Add(city);
             UpdateDbTasks();
         }
@@ -75,7 +70,7 @@ namespace WebMeteo.Controllers
             }
         }
 
-        private List<City> ReadCitiesFromFile()
+        public List<City> ReadCitiesFromFile()
         {
             var colCities = new List<City>();
             using (var sr = new StreamReader(WebConfigurationManager.AppSettings["WayToDB"]))
